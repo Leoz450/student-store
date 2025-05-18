@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Product Details</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .product-image {
+      max-height: 400px;
+      object-fit: cover;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-dark bg-dark mb-4">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="index.html">← Back to Store</a>
+    </div>
+  </nav>
+
+  <a href="cart.html" class="btn btn-outline-light position-relative">
+    🛒 Cart
+    <span id="cart-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
+  </a>
+
+  <!-- Product Details -->
+  <div class="container" id="product-details">
+    <!-- Product info will be injected here -->
+  </div>
+
+  <script>
+    const products = [
+      { id: 1, name: "Notebook", price: 2.99, image: "https://via.placeholder.com/600x400?text=Notebook", category: "notebooks", description: "A spiral notebook with 100 pages." },
+      { id: 2, name: "Pen Pack", price: 1.49, image: "https://via.placeholder.com/600x400?text=Pens", category: "pens", description: "Pack of 5 blue pens." },
+      { id: 3, name: "Backpack", price: 19.99, image: "https://via.placeholder.com/600x400?text=Backpack", category: "backpacks", description: "Durable backpack with laptop compartment." },
+      { id: 4, name: "Math Notebook", price: 3.49, image: "https://via.placeholder.com/600x400?text=Math+Notebook", category: "notebooks", description: "Graph-ruled notebook for math class." }
+    ];
+
+    // Get product ID from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = parseInt(urlParams.get('id'));
+
+    const product = products.find(p => p.id === productId);
+
+    const container = document.getElementById("product-details");
+
+    if (product) {
+      container.innerHTML = `
+        <div class="row">
+          <div class="col-md-6">
+            <img src="${product.image}" class="img-fluid product-image" alt="${product.name}">
+          </div>
+          <div class="col-md-6">
+            <h2>${product.name}</h2>
+            <p class="text-muted">Category: ${product.category}</p>
+            <h4 class="text-success">$${product.price.toFixed(2)}</h4>
+            <p>${product.description}</p>
+            <button class="btn btn-primary" onclick="addToCart(${product.id})">Add to Cart</button>
+          </div>
+        </div>
+      `;
+    } else {
+      container.innerHTML = `<p class="text-danger">Product not found.</p>`;
+    }
+
+    function addToCart(productId) {
+    // Assuming `cart.js` has a function named `addProductToCart`
+    addProductToCart(productId);
+  }
+  </script>
+
+<script src="cart.js"></script>
+
+</body>
+</html>

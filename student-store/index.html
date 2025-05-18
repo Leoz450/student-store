@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Supplies Store</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .product-card img {
+      height: 200px;
+      object-fit: cover;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Student Store</a>
+      <div>
+        <button class="btn btn-outline-light" onclick="filterProducts('all')">All</button>
+        <button class="btn btn-outline-light" onclick="filterProducts('notebooks')">Notebooks</button>
+        <button class="btn btn-outline-light" onclick="filterProducts('pens')">Pens</button>
+        <button class="btn btn-outline-light" onclick="filterProducts('backpacks')">Backpacks</button>
+      </div>
+    </div>
+  </nav>
+
+  <a href="cart.html" class="btn btn-outline-light position-relative">
+    🛒 Cart
+    <span id="cart-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
+  </a>
+
+  <!-- Product Grid -->
+  <div class="container">
+    <div class="row" id="product-list">
+      <!-- Product Cards Here -->
+    </div>
+  </div>
+
+
+
+  <script>
+    const products = [
+      { id: 1, name: "Notebook", price: 2.99, image: "https://via.placeholder.com/300x200?text=Notebook", category: "notebooks" },
+      { id: 2, name: "Pen Pack", price: 1.49, image: "https://via.placeholder.com/300x200?text=Pens", category: "pens" },
+      { id: 3, name: "Backpack", price: 19.99, image: "https://via.placeholder.com/300x200?text=Backpack", category: "backpacks" },
+      { id: 4, name: "Math Notebook", price: 3.49, image: "https://via.placeholder.com/300x200?text=Math+Notebook", category: "notebooks" }
+    ];
+
+    function displayProducts(filteredCategory = 'all') {
+      const list = document.getElementById('product-list');
+      list.innerHTML = "";
+
+      const filtered = filteredCategory === 'all' ? products : products.filter(p => p.category === filteredCategory);
+
+      filtered.forEach(product => {
+        list.innerHTML += `
+          <div class="col-md-3 mb-4">
+            <div class="card product-card">
+              <img src="${product.image}" class="card-img-top" alt="${product.name}">
+              <div class="card-body">
+                <h5 class="card-title">${product.name}</h5>
+                <p class="card-text">$${product.price.toFixed(2)}</p>
+                <a href="product.html?id=${product.id}" class="btn btn-primary">View</a>
+                <button class="btn btn-primary" onclick="addToCart(${product.id})">Add to Cart</button>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function filterProducts(category) {
+      displayProducts(category);
+    }
+
+
+
+
+    // Initial load
+    displayProducts();
+  </script>
+
+<script src="cart.js"></script>
+
+</body>
+</html>

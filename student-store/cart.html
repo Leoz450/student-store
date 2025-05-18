@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Your Cart</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .cart-img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-dark bg-dark mb-4">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="index.html">← Continue Shopping</a>
+    <a href="cart.html" class="btn btn-outline-light position-relative">
+      🛒 Cart
+      <span id="cart-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
+    </a>
+  </div>
+</nav>
+
+<!-- Cart Items -->
+<div class="container">
+  <h2>Your Cart</h2>
+  <div id="cart-items"></div>
+  <h4 class="mt-4">Total: $<span id="cart-total">0.00</span></h4>
+  <a href="checkout.html" class="btn btn-success mt-3">Proceed to Checkout</a>
+</div>
+
+<script>
+  const products = [
+    { id: 1, name: "Notebook", price: 2.99, image: "https://via.placeholder.com/100x100?text=Notebook" },
+    { id: 2, name: "Pen Pack", price: 1.49, image: "https://via.placeholder.com/100x100?text=Pens" },
+    { id: 3, name: "Backpack", price: 19.99, image: "https://via.placeholder.com/100x100?text=Backpack" },
+    { id: 4, name: "Math Notebook", price: 3.49, image: "https://via.placeholder.com/100x100?text=Math+Notebook" }
+  ];
+
+  function getCart() {
+    return JSON.parse(localStorage.getItem('cart')) || [];
+  }
+
+  function saveCart(cart) {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }
+
+  function updateCartCount() {
+    const cart = getCart();
+    const count = cart.reduce((total, item) => total + item.quantity, 0);
+    const cartIcon = document.getElementById('cart-count');
+    if (cartIcon) cartIcon.textContent = count;
+  }
+
+  function removeFromCart(productId) {
+    let cart = getCart();
+    cart = cart.filter(item => item.id !== productId);
+    saveCart(cart);
+    renderCart();
+  }
+
+  function changeQuantity(productId, newQty) {
+    let cart = getCart();
+    const item = cart.find(i => i.id === productId);
+    if (item) {
+      item.quantity = Math.max(1, parseInt(newQty));
+      saveCart(cart);
+      renderCart();
+    }
+  }
+
+  function renderCart() {
+    const cartItemsContainer = document.getElementById('cart-items');
+    const cart = getCart();
+    let total = 0;
+
+    if (cart.length === 0) {
+      cartItemsContainer.innerHTML = "<p>Your cart is empty.</p>";
+      document.getElementById('cart-total').textContent = "0.00";
+      updateCartCount();
+      return;
+    }
+
+    let html = `
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Item</th><th>Price</th><th>Quantity</th><th>Total</th><th></th>
+          </tr>
+        </thead>
+        <tbody>
+    `;
+
+    cart.forEach(item => {
+      const product = products.find(p => p.id === item.id);
+      const itemTotal = product.price * item.quantity;
+      total += itemTotal;
+
+      html += `
+        <tr>
+          <td><img src="${product.image}" class="cart-img me-2">${product.name}</td>
+          <td>$${product.price.toFixed(2)}</td>
+          <td>
+            <input type="number" min="1" value="${item.quantity}" 
+              onchange="changeQuantity(${item.id}, this.value)" class="form-control form-control-sm" style="width: 80px;">
+          </td>
+          <td>$${itemTotal.toFixed(2)}</td>
+          <td><button class="btn btn-sm btn-danger" onclick="removeFromCart(${item.id})">Remove</button></td>
+        </tr>
+      `;
+    });
+
+    html += "</tbody></table>";
+    cartItemsContainer.innerHTML = html;
+    document.getElementById('cart-total').textContent = total.toFixed(2);
+    updateCartCount();
+  }
+
+  document.addEventListener('DOMContentLoaded', renderCart);
+</script>
+
+</body>
+</html>
