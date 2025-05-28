@@ -13,7 +13,7 @@
 </head>
 <body>
 
-  <!-- Navbar -->
+  
   <nav class="navbar navbar-dark bg-dark mb-4">
     <div class="container-fluid">
       <a class="navbar-brand" href="index.html">← Back to Store</a>
@@ -25,9 +25,9 @@
     <span id="cart-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
   </a>
 
-  <!-- Product Details -->
+  
   <div class="container" id="product-details">
-    <!-- Product info will be injected here -->
+    
   </div>
 
   <script>
@@ -38,7 +38,7 @@
       { id: 4, name: "Math Notebook", price: 3.49, image: "https://via.placeholder.com/600x400?text=Math+Notebook", category: "notebooks", description: "Graph-ruled notebook for math class." }
     ];
 
-    // Get product ID from URL
+   
     const urlParams = new URLSearchParams(window.location.search);
     const productId = parseInt(urlParams.get('id'));
 
@@ -66,7 +66,7 @@
     }
 
     function addToCart(productId) {
-    // Assuming `cart.js` has a function named `addProductToCart`
+    
     addProductToCart(productId);
   }
   </script>
